@@ -248,7 +248,7 @@ namespace MoSecretStyles
                     m.SetColor("_MiddleColor", color.Multiply(0.7f));
                     m.SetColor("_BottomColor", color.Multiply(0.4f));
                     m.SetColor("_CrackColor", Color.black);
-                    ss.SecretStyle.InstatiateFaces();
+                    ss.SecretStyle.InstantiateFaces();
                     foreach (var e in ss.SecretStyle.Face.ExpressionFaces)
                     {
                         if (e.Mouth)
@@ -352,7 +352,7 @@ namespace MoSecretStyles
                     m.SetColor("_TopColor", color);
                     m.SetColor("_MiddleColor", color.Multiply(0.5f));
                     m.SetColor("_BottomColor", Color.black);
-                    ss.SecretStyle.InstatiateFaces();
+                    ss.SecretStyle.InstantiateFaces();
                     foreach (var e in ss.SecretStyle.Face.ExpressionFaces)
                     {
                         if (e.Mouth)
@@ -500,7 +500,7 @@ namespace MoSecretStyles
                     m.SetColor("_TopColor", color);
                     m.SetColor("_MiddleColor", color);
                     m.SetColor("_BottomColor", color);
-                    ss.SecretStyle.InstatiateFaces();
+                    ss.SecretStyle.InstantiateFaces();
                     foreach (var e in ss.SecretStyle.Face.ExpressionFaces)
                     {
                         if (e.Mouth)
@@ -744,9 +744,9 @@ namespace MoSecretStyles
         public static void LogError(object message) => Debug.LogError($"[{modName}]: " + message);
     }
 
-    static class ExtentionMethods
+    public static class ExtentionMethods
     {
-        public static string ToObjectName(this Identifiable.Id id)
+        internal static string ToObjectName(this Identifiable.Id id)
         {
             var s = id.ToString().ToLowerInvariant().Split('_').ToList();
             s.Insert(0,s[s.Count - 1]);
@@ -757,7 +757,7 @@ namespace MoSecretStyles
         }
 
         static Dictionary<string, bool> LargoCache = new Dictionary<string, bool>();
-        public static bool LargoContains(this Identifiable.Id id, Identifiable.Id slime)
+        internal static bool LargoContains(this Identifiable.Id id, Identifiable.Id slime)
         {
             if (LargoCache.TryGetValue(id.ToString() + " " + slime.ToString(), out var r))
                 return r;
@@ -793,7 +793,7 @@ namespace MoSecretStyles
         }
         internal static Sprite LoadSprite(this Identifiable.Id id) => LoadImage(id.ToObjectName() + "Exotic.png").CreateSprite();
 
-        public static void InstatiateFaces(this SlimeAppearance appearance)
+        public static void InstantiateFaces(this SlimeAppearance appearance)
         {
             var face = appearance.Face = Object.Instantiate(appearance.Face);
             for (int i = 0; i < face.ExpressionFaces.Length; i++)
