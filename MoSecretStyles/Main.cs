@@ -248,6 +248,7 @@ namespace MoSecretStyles
                     m.SetColor("_MiddleColor", color.Multiply(0.7f));
                     m.SetColor("_BottomColor", color.Multiply(0.4f));
                     m.SetColor("_CrackColor", Color.black);
+                    ss.SecretStyle.InstatiateFaces();
                     foreach (var e in ss.SecretStyle.Face.ExpressionFaces)
                     {
                         if (e.Mouth)
@@ -263,7 +264,6 @@ namespace MoSecretStyles
                             e.Eyes.SetColor("_EyeBlue", e.Eyes.GetColor("_EyeBlue").grayscale * color);
                         }
                     }
-                    ss.SecretStyle.Face.OnEnable();
                     ss.SecretStyle.Icon = rubySlime.LoadSprite();
                     ss.SecretStyle.ColorPalette.Top = color;
                     ss.SecretStyle.ColorPalette.Middle = color.Multiply(0.7f);
@@ -352,6 +352,7 @@ namespace MoSecretStyles
                     m.SetColor("_TopColor", color);
                     m.SetColor("_MiddleColor", color.Multiply(0.5f));
                     m.SetColor("_BottomColor", Color.black);
+                    ss.SecretStyle.InstatiateFaces();
                     foreach (var e in ss.SecretStyle.Face.ExpressionFaces)
                     {
                         if (e.Mouth)
@@ -367,7 +368,6 @@ namespace MoSecretStyles
                             e.Eyes.SetColor("_EyeBlue", e.Eyes.GetColor("_EyeBlue").grayscale * Color.green);
                         }
                     }
-                    ss.SecretStyle.Face.OnEnable();
                     ss.SecretStyle.Icon = acidSlime.LoadSprite();
                     ss.SecretStyle.ColorPalette.Top = color;
                     ss.SecretStyle.ColorPalette.Middle = color.Multiply(0.5f);
@@ -500,6 +500,7 @@ namespace MoSecretStyles
                     m.SetColor("_TopColor", color);
                     m.SetColor("_MiddleColor", color);
                     m.SetColor("_BottomColor", color);
+                    ss.SecretStyle.InstatiateFaces();
                     foreach (var e in ss.SecretStyle.Face.ExpressionFaces)
                     {
                         if (e.Mouth)
@@ -515,7 +516,6 @@ namespace MoSecretStyles
                             e.Eyes.SetColor("_EyeBlue",  Color.blue.Multiply(e.Eyes.GetColor("_EyeBlue").grayscale));
                         }
                     }
-                    ss.SecretStyle.Face.OnEnable();
                     ss.SecretStyle.Icon = cheezSlime.LoadSprite();
                     ss.SecretStyle.ColorPalette.Top = color;
                     ss.SecretStyle.ColorPalette.Middle = color;
@@ -791,7 +791,22 @@ namespace MoSecretStyles
             LargoCache.Add(id.ToString() + " " + slime.ToString(), r);
             return r;
         }
-        public static Sprite LoadSprite(this Identifiable.Id id) => LoadImage(id.ToObjectName() + "Exotic.png").CreateSprite();
+        internal static Sprite LoadSprite(this Identifiable.Id id) => LoadImage(id.ToObjectName() + "Exotic.png").CreateSprite();
+
+        public static void InstatiateFaces(this SlimeAppearance appearance)
+        {
+            var face = appearance.Face = Object.Instantiate(appearance.Face);
+            for (int i = 0; i < face.ExpressionFaces.Length; i++)
+            {
+                var f = face.ExpressionFaces[i];
+                if (f.Mouth)
+                    f.Mouth = Object.Instantiate(f.Mouth);
+                if (f.Eyes)
+                    f.Eyes = Object.Instantiate(f.Eyes);
+                face.ExpressionFaces[i] = f;
+            }
+            face.OnEnable();
+        }
     }
 
     [SRML.Utils.Enum.EnumHolder]
